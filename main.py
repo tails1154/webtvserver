@@ -18,8 +18,11 @@ def handle_client(client_socket, client_address):
             if not data:
                 print(f"[*] Client {client_address[0]}:{client_address[1]} disconnected.")
                 break
-            
+
+            print("Got data:")
+
             decoded_data = data.decode('utf-8')
+            print(decoded_data)
             if decoded_data.startswith("GET wtv-1800:/preregister"):
                print(f"[*] Client {client_address[0]}:{client_address[1]} sent a request to wtv-1800:/preregister")
                print("[*] Sending back html file")
@@ -28,7 +31,6 @@ def handle_client(client_socket, client_address):
                response = "200 OK\r\nConnection: close\r\n" + data
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
-               client_socket.close()
 
     except Exception as e:
         print(f"[-] Error handling client {client_address[0]}:{client_address[1]}: {e}")
