@@ -22,7 +22,7 @@ def handle_client(client_socket, client_address):
 
             print("Got data:")
 
-            decoded_data = data.decode('utf-8')
+            decoded_data = data.decode('utf-8', errors='ignore')
             print(decoded_data)
             if decoded_data.startswith("GET wtv-1800:/preregister"):
                print(f"[*] Client {client_address[0]}:{client_address[1]} sent a request to wtv-1800:/preregister")
@@ -44,12 +44,15 @@ def handle_client(client_socket, client_address):
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
                break
-            elif decoded_data.startswith("GET wtv-1800:/tellyscript"):
+            elif decoded_data.startswith("GET wtv-home:/tellyscript"):
                print("[*] Looks like SOMEONE wants a tellyscript")
-               with open("telly.tok") as f:
-                   data=f.read()
-               response = "200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)) + "\r\nContent-Type: text/tellyscript\r\n\r\n" + data
-               client_socket.sendall(response.encode('utf-8'))
+               with open("telly.tok", "rb") as f:   # <-- open in binary mode
+                    data = f.read()
+
+               response = b"200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)).encode() + b"\r\nContent-Type: text/tellyscript\r\n\r\n" + data
+               client_socket.sendall(response)
+
+               client_socket.sendall(response)
                print("[*] Sent request")
                break
 
