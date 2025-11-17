@@ -5,6 +5,7 @@ import threading
 # NOTE: 192.168.0.124 is my local ip
 HOST = '0.0.0.0'  # Listen on all available interfaces
 PORT = 1615       # Port to listen on
+SERVICEIP = '192.168.0.124' # Set this to your current local ip that the box will try to go to
 
 def handle_client(client_socket, client_address):
     """
@@ -25,12 +26,24 @@ def handle_client(client_socket, client_address):
             print(decoded_data)
             if decoded_data.startswith("GET wtv-1800:/preregister"):
                print(f"[*] Client {client_address[0]}:{client_address[1]} sent a request to wtv-1800:/preregister")
+               # print("[*] Sending back html file")
+               # with open("services/wtv-1800/preregister.html") as f:
+               #     data=f.read()
+               response = "200 OK\r\nConnection: close\r\nwtv-visit: wtv-home:/home\r\nwtv-service: name=wtv-home host=" + SERVICEIP + " port=1615 flags=0x00000001 connections=1\r\nwtv-encrypted: false\r\nContent-length: 0\r\nContent-Type: text/html\r\n\r\n"
+               client_socket.sendall(response.encode('utf-8'))
+               print("[DEBUG] Sending the following")
+               print(response)
+               print("[*] Sent request")
+               break
+            elif decoded_data.startswith("GET wtv-home:/home"):
+               print(f"[*] Client {client_address[0]}:{client_address[1]} sent a request to wtv-home:/home")
                print("[*] Sending back html file")
-               with open("services/wtv-1800/preregister.html") as f:
+               with open("services/wtv-home/home.html") as f:
                    data=f.read()
-               response = "200 OK\r\nConnection: close\r\n" + data
+               response = "200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)) + "\r\nContent-Type: text/html\r\n\r\n" + data
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
+               break
 
     except Exception as e:
         print(f"[-] Error handling client {client_address[0]}:{client_address[1]}: {e}")
