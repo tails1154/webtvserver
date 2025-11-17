@@ -29,7 +29,7 @@ def handle_client(client_socket, client_address):
                # print("[*] Sending back html file")
                # with open("services/wtv-1800/preregister.html") as f:
                #     data=f.read()
-               response = "200 OK\r\nConnection: close\r\nwtv-visit: wtv-home:/home\r\nwtv-service: name=wtv-home host=" + SERVICEIP + " port=1615 flags=0x00000001 connections=1\r\nwtv-encrypted: false\r\nContent-length: 0\r\nContent-Type: text/html\r\n\r\n"
+               response = "200 OK\r\nConnection: close\r\nwtv-visit: wtv-home:/home\r\nwtv-service: name=wtv-1800 host=" + SERVICEIP + "port=1615 flags=0x00000001 connections=1\r\nwtv-service: name=wtv-home host=" + SERVICEIP + " port=1615 flags=0x00000001 connections=1\r\nwtv-encrypted: false\r\nContent-length: 0\r\nContent-Type: text/html\r\n\r\n"
                client_socket.sendall(response.encode('utf-8'))
                print("[DEBUG] Sending the following")
                print(response)
