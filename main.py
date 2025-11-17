@@ -44,6 +44,14 @@ def handle_client(client_socket, client_address):
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
                break
+           elif decoded_data.startswith("GET wtv-1800:/tellyscript"):
+               print("[*] Looks like SOMEONE wants a tellyscript")
+               with open("telly.tok") as f:
+                   data=f.read()
+               response = "200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)) + "\r\nContent-Type: text/tellyscript\r\n\r\n" + data
+               client_socket.sendall(response.encode('utf-8'))
+               print("[*] Sent request")
+               break
 
     except Exception as e:
         print(f"[-] Error handling client {client_address[0]}:{client_address[1]}: {e}")
