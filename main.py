@@ -40,7 +40,7 @@ def handle_client(client_socket, client_address):
                print("[*] Sending back html file")
                with open("services/wtv-home/home.html") as f:
                    data=f.read()
-               response = "200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)) + "\r\nContent-Type: text/html\r\n\r\n" + data
+               response = "200 OK\r\nConnection: close\r\nContent-length: " + str(len(data)) + "\r\nContent-Type: text/html\r\nwtv-service: name=wtv-1800 host=" + SERVICEIP + "port=1615 flags=0x00000001 connections=1\r\n" + data
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
                break
