@@ -44,7 +44,7 @@ def handle_client(client_socket, client_address):
                client_socket.sendall(response.encode('utf-8'))
                print("[*] Sent request")
                break
-           elif decoded_data.startswith("GET wtv-1800:/tellyscript"):
+            elif decoded_data.startswith("GET wtv-1800:/tellyscript"):
                print("[*] Looks like SOMEONE wants a tellyscript")
                with open("telly.tok") as f:
                    data=f.read()
